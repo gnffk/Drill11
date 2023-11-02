@@ -45,7 +45,7 @@ RUN_SPEED_PPS = (RUN_SPEED_MPS* PIXEL_PER_METER)
 # fill here
 TIME_PER_ACTION = 1
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
-FRAMES_PER_ACTION = 5
+FRAMES_PER_ACTION = 4
 
 
 
@@ -64,17 +64,22 @@ class Run:
 
     @staticmethod
     def do(bird):
-        bird.frame = (bird.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 5
+        bird.frame = (bird.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 4
         bird.x += bird.dir * RUN_SPEED_PPS * game_framework.frame_time
-        bird.x += bird.dir * 5
+        bird.x += bird.dir * 4
         bird.x = clamp(25, bird.x, 1600 - 25)
-        
+        if bird.x>1600-184:
+            bird.dir, bird.action, bird.face_dir = -1, 0, -1
+        if bird.x<184:
+            bird.dir, bird.action, bird.face_dir = 1, 1, 1
 
     @staticmethod
     def draw(bird):
-        bird.image.clip_draw(int(bird.frame) * 184, bird.action * 168, 184, 168, bird.x, bird.y+200)
-
-
+        if bird.dir== 1:
+            bird.image.clip_draw(int(bird.frame) * 180, 0 * 168, 184, 168, bird.x, bird.y+200)
+        if bird.dir == -1:
+            bird.image.clip_composite_draw(int(bird.frame) * 180, 0 * 168, 184, 168, 0,'h', bird.x, bird.y + 200,184,168)
+            print(bird.action)
 class StateMachine:
     def __init__(self, bird):
         self.bird = bird
