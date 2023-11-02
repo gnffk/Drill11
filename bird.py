@@ -4,7 +4,7 @@ from pico2d import get_time, load_image, load_font, clamp,  SDL_KEYDOWN, SDL_KEY
 from ball import Ball, BigBall
 import game_world
 import game_framework
-
+import random
 # state event check
 # ( state event type, event value )
 
